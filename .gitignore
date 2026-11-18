@@ -84,6 +84,10 @@ mono_crash.*
 *.unitypackage
 *.unitypackage.meta
 *.app
+# Folders and files Unity writes next to a build when the build is saved inside the project folder
+*_BackUpThisFolder_ButDontShipItWithYourGame/
+*_BurstDebugInformation_DoNotShip/
+*.symbols.zip
 
 # Crashlytics generated file
 crashlytics-build.properties
