@@ -4,33 +4,33 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - QDSUIBackplateGradient
-  - QDSUIToggleBorderlessButton
-  - QDSUIToggleThumbnail
-  - QDSUIBorderlessButton
-  - QDSUIToggleSwitch
-  - QDSUITooltip
   - QDSUISection
-  - QDSUISharedThemeColor
-  - QDSUIIcon
   - QDSUIAccentColor
   - QDSUISecondaryButton
+  - QDSUIPrimaryButton
+  - QDSUITextSecondaryInvertedColor
+  - QDSUITextInvertedColor
   - QDSUIToggleButton
+  - QDSUIIcon
   - QDSUITextSecondaryColor
-  - Locomotion
+  - QDSUIDestructiveButton
+  - QDSUISharedThemeColor
+  - QDSUIBorderlessButton
+  - QDSUIToggleBorderlessButton
+  - QDSUIBackplateGradient
+  - QDSUITooltip
+  - QDSUIBackplate
+  - QDSUIToggleSwitch
   - PassThroughButton
+  - PassThrough
+  - Locomotion
   - LocoButton
   - LocoText
-  - PassThrough
-  - SamplesInfoPanel
-  - QDSUIPrimaryButton
-  - QDSUITextInvertedColor
-  - QDSUITextSecondaryInvertedColor
-  - QDSUIDestructiveButton
-  - QDSUITextInputField
   - QDSUILineDrawing
-  - QDSUIBackplate
+  - QDSUITextInputField
+  - SamplesInfoPanel
   - QDSUIToggleCheckboxRadio
+  - QDSUIToggleThumbnail
   layers:
   - Default
   - TransparentFX
