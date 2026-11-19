@@ -145,7 +145,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 971072}
-  m_Text: Stars 0/5   1:30
+  m_Text: Stars 0/5
   m_OffsetZ: 0
   m_CharacterSize: 0.004
   m_LineSpacing: 1
@@ -26253,6 +26253,7 @@ MonoBehaviour:
     outline: {fileID: 600667159}
     placed: 0
   snapDistance: 0.2
+  useTimer: 0
   timeLimit: 90
   statusText: {fileID: 971073}
   nightLight: {fileID: 243089594}

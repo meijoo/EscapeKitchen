@@ -18,6 +18,8 @@ public class StarPuzzle : MonoBehaviour
     public float snapDistance = 0.2f;
 
     [Header("Timer")]
+    [Tooltip("Off = no countdown; the puzzle only ends when all stars are placed.")]
+    public bool useTimer = false;
     [Tooltip("Seconds the player has to finish the puzzle.")]
     public float timeLimit = 90f;
     public TextMesh statusText;
@@ -41,7 +43,7 @@ public class StarPuzzle : MonoBehaviour
     {
         if (finished) return;
 
-        timeLeft -= Time.deltaTime;
+        if (useTimer) timeLeft -= Time.deltaTime;
 
         foreach (var s in slots)
         {
@@ -53,7 +55,7 @@ public class StarPuzzle : MonoBehaviour
         }
 
         if (PlacedCount() == slots.Length) { Win(); return; }
-        if (timeLeft <= 0f) { Lose(); return; }
+        if (useTimer && timeLeft <= 0f) { Lose(); return; }
         UpdateText();
     }
 
@@ -102,6 +104,7 @@ public class StarPuzzle : MonoBehaviour
     void UpdateText()
     {
         if (!statusText) return;
+        if (!useTimer) { statusText.text = string.Format("Stars {0}/{1}", PlacedCount(), slots.Length); return; }
         int t = Mathf.CeilToInt(Mathf.Max(timeLeft, 0f));
         statusText.text = string.Format("Stars {0}/{1}   {2}:{3:00}", PlacedCount(), slots.Length, t / 60, t % 60);
     }
