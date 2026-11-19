@@ -86,6 +86,10 @@ Steps
 
 - Baby Bottle Free low-poly 3D model by sam-etver-3d: https://www.cgtrader.com/free-3d-models/food/miscellaneous/baby-bottle-55a51e4a-df19-412d-9696-40ba91a3fcff
 
+- Low Poly Living Room Pack (71 Models) - Cozy Interior Furniture & Props by The PolynestLab: https://assetstore.unity.com/packages/3d/props/interior/low-poly-living-room-pack-71-models-cozy-interior-furniture-prop-320366
+
+- Minimalist ArchViz Bedroom by Rad Coders: https://assetstore.unity.com/packages/3d/environments/minimalist-archviz-bedroom-131093
+
 Generative AI tools
 
 - Claude (Anthropic): helped draft Unity C# scripts and debug errors.
