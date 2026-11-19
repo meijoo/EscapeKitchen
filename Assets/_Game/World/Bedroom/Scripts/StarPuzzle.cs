@@ -68,8 +68,9 @@ public class StarPuzzle : MonoBehaviour
 
     void SetGrabbable(GameObject star, bool on)
     {
-        var grab = star.GetComponent("Grabbable") as Behaviour;
-        if (grab) grab.enabled = on;
+        // Works with Zhi's PlayerRig grab system and Meta's: turn off any component named Grabbable.
+        foreach (var b in star.GetComponents<Behaviour>())
+            if (b != null && b.GetType().Name == "Grabbable") b.enabled = on;
         foreach (Transform child in star.transform)
             if (child.name.Contains("GrabInteraction")) child.gameObject.SetActive(on);
     }
