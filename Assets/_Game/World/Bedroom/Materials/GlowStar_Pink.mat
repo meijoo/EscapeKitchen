@@ -55,6 +55,7 @@ Material:
     - _PulseSpeed: 2
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _XRMotionVectorsPass: 1
     m_Colors:
     - _GlowColor: {r: 1.2830191, g: 0.44905666, b: 0.8981133, a: 1.2830191}
   m_BuildTextureStacks: []
