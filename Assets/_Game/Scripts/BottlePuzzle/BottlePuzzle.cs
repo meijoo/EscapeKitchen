@@ -20,12 +20,16 @@ namespace EscapeKitchen
             placedSound = MakeTone("Bottle placed", .18f, 660f, 880f);
             solvedSound = MakeTone("Kitchen unlocked", .8f, 523f, 1046f);
         }
-        public bool TryPlace(KitchenBottle bottle)
+        // Let go of a bottle close to its socket (with the cabinet open).
+        public bool TryPlace(KitchenBottle bottle) => Place(bottle, false);
+        // A bottle touching its matching socket, however it got there.
+        public bool TryPlaceTouching(KitchenBottle bottle) => Place(bottle, true);
+        bool Place(KitchenBottle bottle, bool touching)
         {
             if (Solved || bottle == null || bottle.IsPlaced) return false;
             foreach (var socket in sockets)
             {
-                if (socket == null || !socket.TryAccept(bottle)) continue;
+                if (socket == null || !(touching ? socket.TryAcceptTouching(bottle) : socket.TryAccept(bottle))) continue;
                 if (audioSource != null) { audioSource.transform.position = socket.transform.position; audioSource.PlayOneShot(placedSound, .35f); }
                 if (PlacedCount == 3)
                 {

@@ -74,6 +74,8 @@ namespace EscapeKitchen
 
         void FixedUpdate()
         {
+            // Touching its matching socket counts, held or not.
+            if (!IsPlaced && puzzle != null && puzzle.TryPlaceTouching(this)) return;
             if (IsHeld)
             {
                 var next = Vector3.MoveTowards(Body.position, targetPosition, 6f * Time.fixedDeltaTime);

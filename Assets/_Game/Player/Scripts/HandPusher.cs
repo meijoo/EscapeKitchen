@@ -124,6 +124,7 @@ namespace EscapeKitchen.Player
             // A hand gripping the floor or a climbable (or closing to grip one) shouldn't also shove
             // what it's holding on to.
             bool gripping = Mathf.Max(_hand.PinchStrength, _hand.GripStrength) >= gripIntentThreshold
+                            || _hand.IsBusy
                             || (_hand.Locomotion && _hand.Locomotion.IsPlanted(_hand));
             bool active = _hand.IsTracked && !gripping;
             for (int i = 0; i < _probes.Count; i++)

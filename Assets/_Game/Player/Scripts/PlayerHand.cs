@@ -77,6 +77,19 @@ namespace EscapeKitchen.Player
         public IReadOnlyCollection<Grabbable> NearbyGrabbables => _nearby;
         public CrawlLocomotion Locomotion => _locomotion;
 
+        /// <summary>
+        /// Something this hand holds through another interaction system (e.g. the kitchen's
+        /// KitchenInteractor) rather than as a <see cref="Grabbable"/>.
+        /// </summary>
+        public Object ExternalHold { get; private set; }
+        /// <summary>Holding anything (a Grabbable or an external hold): the hand doesn't grip the floor or push.</summary>
+        public bool IsBusy => IsHolding || ExternalHold != null;
+        /// <summary>
+        /// Something is within grabbing reach, from this hand's own search or another interaction
+        /// system: closing the hand picks that up instead of gripping the floor.
+        /// </summary>
+        public bool IsHoveringAnything => HoveredObject != null || Time.frameCount - _externalHoverFrame <= 1;
+
         // --- internals ----------------------------------------------------------------------
         Transform _palm, _wrist, _thumbTip, _indexTip, _middleTip, _ringTip, _littleTip;
         Transform _indexProximal, _middleProximal, _littleProximal;
@@ -89,6 +102,8 @@ namespace EscapeKitchen.Player
         readonly Queue<(Vector3 pos, Quaternion rot, float time)> _samples = new Queue<(Vector3, Quaternion, float)>();
         float _gestureStartTime = -1f;
         float _lostTrackingTime;
+        int _externalHoverFrame = -10;
+        Collider[] _externalColliders;
 
         void Reset()
         {
@@ -288,7 +303,7 @@ namespace EscapeKitchen.Player
                 var g = FindGrabbable(col);
                 if (g == null || !g.isActiveAndEnabled) continue;
                 _nearby.Add(g);
-                if (IsHolding || !g.CanBeGrabbedBy(this)) continue;
+                if (IsBusy || !g.CanBeGrabbedBy(this)) continue;
 
                 // Whole-hand grab around the palm, or a precise pinch between thumb and index.
                 float palmDist = DistanceTo(col, palmGrabPoint);
@@ -351,6 +366,39 @@ namespace EscapeKitchen.Player
             target.EndGrab(this, velocity, angular);
             if (_locomotion) _locomotion.SetBodyCollisionIgnored(target, false);
             onRelease.Invoke(target);
+        }
+
+        // ------------------------------------------------------------------------------------
+        // Other interaction systems
+        // ------------------------------------------------------------------------------------
+
+        /// <summary>
+        /// Another interaction system has something within this hand's reach. Call it every frame
+        /// while that's true; crawling then leaves a closing hand to that system.
+        /// </summary>
+        public void ReportExternalHover() => _externalHoverFrame = Time.frameCount;
+
+        /// <summary>
+        /// Another interaction system picked something up with this hand. Until
+        /// <see cref="EndExternalHold"/> the hand doesn't grip the floor, push or grab Grabbables,
+        /// and the body doesn't collide with <paramref name="colliders"/>.
+        /// </summary>
+        public void BeginExternalHold(Object held, Collider[] colliders)
+        {
+            if (held == null) return;
+            if (HeldObject) Release(false);
+            if (ExternalHold != null) EndExternalHold(ExternalHold);
+            ExternalHold = held;
+            _externalColliders = colliders;
+            if (_locomotion && colliders != null) _locomotion.SetBodyCollisionIgnored(held, colliders, true);
+        }
+
+        public void EndExternalHold(Object held)
+        {
+            if (held == null || ExternalHold != held) return;
+            ExternalHold = null;
+            if (_locomotion && _externalColliders != null) _locomotion.SetBodyCollisionIgnored(held, _externalColliders, false);
+            _externalColliders = null;
         }
 
         /// <summary>Called by a Grabbable when another hand takes it from this one.</summary>

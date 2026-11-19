@@ -14,6 +14,8 @@ namespace EscapeKitchen
         public bool IsHeld => holder != null;
         public Vector3 HandlePosition => transform.TransformPoint(handleLocalPosition);
         public bool OpenRequested => Mathf.Abs(targetAngle) > 1f;
+        /// <summary>Can a hand take hold of it right now (not locked, held, or opened for good)?</summary>
+        public bool CanGrab => !locked && !keepOpen && !IsHeld;
         Quaternion closedRotation;
         Rigidbody body;
         Object holder;

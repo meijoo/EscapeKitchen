@@ -153,7 +153,7 @@ namespace EscapeKitchen.Player
         readonly Collider[] _climbHits = new Collider[16];
         Vector3 _spawnPosition;
         Quaternion _spawnRotation;
-        readonly Dictionary<Grabbable, Coroutine> _pendingRestores = new Dictionary<Grabbable, Coroutine>();
+        readonly Dictionary<Object, Coroutine> _pendingRestores = new Dictionary<Object, Coroutine>();
         float _lastGroundY;             // feet height the last time we stood on something
         Rigidbody _standingOn;          // rigidbody under our feet (null = static ground or airborne)
         Rigidbody _groundBodyThisMove;
@@ -330,7 +330,7 @@ namespace EscapeKitchen.Player
         {
             state.frameDelta = Vector3.zero;
             if (hand == null) return;
-            if (!hand.IsTracked || hand.IsHolding)
+            if (!hand.IsTracked || hand.IsBusy)
             {
                 SetPlanted(hand, state, false);
                 return;
@@ -345,7 +345,7 @@ namespace EscapeKitchen.Player
             {
                 // A hand closing over a grabbable is picking that up, not gripping anything.
                 bool closed = anchorGesture != AnchorGesture.PalmDown
-                              && hand.IsClosed(false) && hand.HoveredObject == null;
+                              && hand.IsClosed(false) && !hand.IsHoveringAnything;
                 bool grounded = Body.isGrounded;
                 // "Floor" is whatever you're standing on (the floor, or the top of the sofa).
                 bool floorGrab = closed && grounded && height <= grabReach;
@@ -501,41 +501,51 @@ namespace EscapeKitchen.Player
         /// </summary>
         public void SetBodyCollisionIgnored(Grabbable target, bool ignored)
         {
-            if (target == null || target.Colliders == null) return;
-            if (_pendingRestores.TryGetValue(target, out var pending))
+            if (target == null) return;
+            SetBodyCollisionIgnored(target, target.Colliders, ignored);
+        }
+
+        /// <summary>
+        /// Same, for something held through another interaction system (keyed by the held object,
+        /// so a hand-to-hand pass cancels the pending restore).
+        /// </summary>
+        public void SetBodyCollisionIgnored(Object held, Collider[] colliders, bool ignored)
+        {
+            if (held == null || colliders == null) return;
+            if (_pendingRestores.TryGetValue(held, out var pending))
             {
                 if (pending != null) StopCoroutine(pending);
-                _pendingRestores.Remove(target);
+                _pendingRestores.Remove(held);
             }
 
             if (ignored)
             {
-                foreach (var c in target.Colliders)
+                foreach (var c in colliders)
                     if (c) Physics.IgnoreCollision(Body, c, true);
             }
             else if (isActiveAndEnabled)
             {
-                _pendingRestores[target] = StartCoroutine(RestoreWhenClear(target));
+                _pendingRestores[held] = StartCoroutine(RestoreWhenClear(held, colliders));
             }
         }
 
-        IEnumerator RestoreWhenClear(Grabbable target)
+        IEnumerator RestoreWhenClear(Object held, Collider[] colliders)
         {
             var wait = new WaitForSeconds(0.1f);
             float giveUp = Time.time + 3f;
-            while (target != null && Time.time < giveUp && OverlapsBody(target))
+            while (held != null && Time.time < giveUp && OverlapsBody(colliders))
                 yield return wait;
 
-            if (target != null && !target.IsHeld)
-                foreach (var c in target.Colliders)
+            if (held != null && !(held is Grabbable g && g.IsHeld))
+                foreach (var c in colliders)
                     if (c) Physics.IgnoreCollision(Body, c, false);
-            if (target != null) _pendingRestores.Remove(target);
+            if (held != null) _pendingRestores.Remove(held);
         }
 
-        bool OverlapsBody(Grabbable target)
+        bool OverlapsBody(Collider[] colliders)
         {
             Bounds body = Body.bounds;
-            foreach (var c in target.Colliders)
+            foreach (var c in colliders)
                 if (c && c.enabled && c.bounds.Intersects(body)) return true;
             return false;
         }
