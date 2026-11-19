@@ -171,6 +171,8 @@ MonoBehaviour:
   pushableByHands: 0
   throwMultiplier: 1
   maxThrowSpeed: 5
+  holdInPlaceUntilGrabbed: 0
+  returnHomeBelowY: -2
   onGrabbed:
     m_PersistentCalls:
       m_Calls: []
@@ -417,6 +419,8 @@ MonoBehaviour:
   pushableByHands: 0
   throwMultiplier: 1
   maxThrowSpeed: 5
+  holdInPlaceUntilGrabbed: 0
+  returnHomeBelowY: -2
   onGrabbed:
     m_PersistentCalls:
       m_Calls: []
@@ -562,6 +566,56 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &662528564
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 662528566}
+  - component: {fileID: 662528565}
+  m_Layer: 0
+  m_Name: Exit To Kitchen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &662528565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662528564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d51e9bfb6e0bb470ea6e2ee03fd2d370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EscapeKitchen.Flow.RoomExit
+  nextScene: DemoScene
+  size: {x: 0.9, y: 2.6, z: 0.8}
+  startUnlocked: 0
+  onPassed:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &662528566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662528564}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.5, y: 1.2, z: 3.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &935413156
 GameObject:
   m_ObjectHideFlags: 0
@@ -1101,6 +1155,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1131344949458741873, guid: d1e7cf0beed4a4bc49dd9457e1198f72, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1131344949458741873, guid: d1e7cf0beed4a4bc49dd9457e1198f72, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1131344949458741873, guid: d1e7cf0beed4a4bc49dd9457e1198f72, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 662528565}
+    - target: {fileID: 1131344949458741873, guid: d1e7cf0beed4a4bc49dd9457e1198f72, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1131344949458741873, guid: d1e7cf0beed4a4bc49dd9457e1198f72, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Unlock
+      objectReference: {fileID: 0}
+    - target: {fileID: 1131344949458741873, guid: d1e7cf0beed4a4bc49dd9457e1198f72, type: 3}
+      propertyPath: onOpened.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: EscapeKitchen.Flow.RoomExit, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 6447867083164985163, guid: d1e7cf0beed4a4bc49dd9457e1198f72, type: 3}
       propertyPath: m_Name
       value: LivingRoom
@@ -1167,3 +1245,4 @@ SceneRoots:
   - {fileID: 3412417980577223566}
   - {fileID: 1433426588}
   - {fileID: 2012879751}
+  - {fileID: 662528566}

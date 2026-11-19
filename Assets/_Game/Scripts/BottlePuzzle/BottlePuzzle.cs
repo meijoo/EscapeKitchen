@@ -6,6 +6,8 @@ namespace EscapeKitchen
     {
         public BottleSocket[] sockets;
         public KitchenSwingDoor exitDoor;
+        [Tooltip("Runs once when the third bottle is placed (after the exit door unlocks).")]
+        public UnityEngine.Events.UnityEvent onSolved = new UnityEngine.Events.UnityEvent();
         public bool Solved { get; private set; }
         public int PlacedCount
         {
@@ -37,6 +39,7 @@ namespace EscapeKitchen
                     exitDoor.OpenPermanently();
                     if (audioSource != null) audioSource.PlayOneShot(solvedSound, .45f);
                     Debug.Log("EscapeKitchen: all three matching bottles placed; door beside the fridge unlocked.", this);
+                    onSolved.Invoke();
                 }
                 return true;
             }

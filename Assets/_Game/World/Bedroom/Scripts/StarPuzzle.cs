@@ -88,7 +88,7 @@ public class StarPuzzle : MonoBehaviour
     {
         finished = true;
         if (nightLight) nightLight.SetActive(true);
-        if (statusText) statusText.text = "You win!\nThe stars are back.";
+        UpdateText(); // final count; the run's own "You escaped" message comes at the very end
         onWin.Invoke();
     }
 

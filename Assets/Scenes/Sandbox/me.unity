@@ -905,7 +905,19 @@ MonoBehaviour:
   maximumQuackInterval: 3.1
   onFound:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 662528565}
+        m_TargetAssemblyTypeName: EscapeKitchen.Flow.RoomExit, Assembly-CSharp
+        m_MethodName: Unlock
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!82 &302268533
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1454,6 +1466,56 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2574771169908623621, guid: 22a931750861f724a854421dccfa17e0, type: 3}
   m_PrefabInstance: {fileID: 958802943}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &662528564
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 662528566}
+  - component: {fileID: 662528565}
+  m_Layer: 0
+  m_Name: Exit To Living Room
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &662528565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662528564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d51e9bfb6e0bb470ea6e2ee03fd2d370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EscapeKitchen.Flow.RoomExit
+  nextScene: Zhi
+  size: {x: 1.3, y: 2.6, z: 1}
+  startUnlocked: 0
+  onPassed:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &662528566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662528564}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.35, y: 1.2, z: -3.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &821981893 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1263868737664158, guid: 6b5e9772e973b514993c495d4471494c, type: 3}
@@ -1796,31 +1858,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.6191001
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.11606
+      value: -1.06008
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.38763046
+      value: -0.39251995
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9238795
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.38268346
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3300,3 +3362,4 @@ SceneRoots:
   - {fileID: 2103078895}
   - {fileID: 1903360826}
   - {fileID: 130983195}
+  - {fileID: 662528566}
