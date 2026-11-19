@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
+using EscapeKitchen.Interaction;
+using EscapeKitchen.Player;
 
 namespace EscapeBathroom
 {
@@ -9,12 +11,14 @@ namespace EscapeBathroom
     {
         public AudioClip quackClip;
         public AudioClip foundClip;
+        [Tooltip("The crawling rig's hand-grabbable duck. Picking it up is the only win requirement.")]
+        public Grabbable handGrabbable;
         [Min(.5f)] public float minimumQuackInterval = 2.2f;
         [Min(.5f)] public float maximumQuackInterval = 3.1f;
         public UnityEvent onFound = new UnityEvent();
         public bool Found { get; private set; }
-        public bool IsHeld => owner != null;
-        public Object Holder => owner;
+        public bool IsHeld => owner != null || (handGrabbable != null && handGrabbable.IsHeld);
+        public Object Holder => owner != null ? owner : handGrabbable != null ? handGrabbable.Holder : null;
         public int QuackCount { get; private set; }
         public int FoundCount { get; private set; }
         public float NextQuackTime { get; private set; }
@@ -32,9 +36,34 @@ namespace EscapeBathroom
         {
             Voice = GetComponent<AudioSource>();
             Body = GetComponent<Rigidbody>();
+            if (handGrabbable == null) handGrabbable = GetComponent<Grabbable>();
             homePosition = transform.position;
             homeRotation = transform.rotation;
             NextQuackTime = Time.time + .7f;
+        }
+
+        void OnEnable()
+        {
+            if (handGrabbable != null) handGrabbable.onGrabbed.AddListener(OnHandGrabbed);
+        }
+
+        void OnHandGrabbed(PlayerHand hand)
+        {
+            // A real pickup must already own the duck; merely reaching it is not a win.
+            if (hand != null && handGrabbable != null && handGrabbable.Holder == hand)
+                CompleteFind();
+        }
+
+        void CompleteFind()
+        {
+            if (Found) return;
+            Found = true;
+            FoundCount++;
+            Voice.Stop();
+            Voice.pitch = 1f;
+            if (foundClip != null) Voice.PlayOneShot(foundClip, .8f);
+            onFound.Invoke();
+            Debug.Log("Bathroom: hidden duck picked up; exit unlocked.", this);
         }
 
         void Update()
@@ -49,35 +78,28 @@ namespace EscapeBathroom
             Voice.clip = quackClip;
             Voice.Play();
             QuackCount++;
-            NextQuackTime = Time.time + Random.Range(Mathf.Max(.8f, minimumQuackInterval), Mathf.Max(minimumQuackInterval, maximumQuackInterval));
+            float interval = Random.Range(Mathf.Max(.8f, minimumQuackInterval), Mathf.Max(minimumQuackInterval, maximumQuackInterval));
+            // Play the supplied recording in full, with a short pause between repeats.
+            NextQuackTime = Time.time + Mathf.Max(interval, quackClip.length / Voice.pitch + .35f);
             return true;
         }
 
         public bool TryGrab(Object newOwner)
         {
-            if (newOwner == null || IsHeld || !isActiveAndEnabled) return false;
+            if (handGrabbable != null || newOwner == null || IsHeld || !isActiveAndEnabled) return false;
             owner = newOwner;
             Body.isKinematic = true;
             Body.useGravity = false;
             targetPosition = previousTarget = Body.position;
             targetRotation = Body.rotation;
             releaseVelocity = Vector3.zero;
-            if (!Found)
-            {
-                Found = true;
-                FoundCount++;
-                Voice.Stop();
-                Voice.pitch = 1f;
-                if (foundClip != null) Voice.PlayOneShot(foundClip, .8f);
-                onFound.Invoke();
-                Debug.Log("Bathroom: hidden duck found!", this);
-            }
+            CompleteFind();
             return true;
         }
 
         public void MoveHeld(Vector3 position, Quaternion rotation)
         {
-            if (!IsHeld) return;
+            if (owner == null) return;
             releaseVelocity = Vector3.ClampMagnitude((position - previousTarget) / Mathf.Max(.001f, Time.deltaTime), 2f);
             previousTarget = position;
             targetPosition = position;
@@ -86,7 +108,7 @@ namespace EscapeBathroom
 
         public bool Release(Object currentOwner)
         {
-            if (!IsHeld || currentOwner != owner) return false;
+            if (owner == null || currentOwner != owner) return false;
             owner = null;
             Body.isKinematic = false;
             Body.useGravity = true;
@@ -96,7 +118,7 @@ namespace EscapeBathroom
 
         void FixedUpdate()
         {
-            if (!IsHeld) return;
+            if (owner == null) return;
             var next = Vector3.MoveTowards(Body.position, targetPosition, 5f * Time.fixedDeltaTime);
             var delta = next - Body.position;
             if (delta.sqrMagnitude > .000001f && Body.SweepTest(delta.normalized, out var hit, delta.magnitude + .003f, QueryTriggerInteraction.Ignore))
@@ -109,12 +131,13 @@ namespace EscapeBathroom
         public void RestartHunt()
         {
             if (!Application.isPlaying) return;
+            if (handGrabbable != null) handGrabbable.ReturnHome();
             owner = null;
             Found = false;
             FoundCount = QuackCount = 0;
             Voice.Stop();
             Body.isKinematic = true;
-            Body.useGravity = false;
+            Body.useGravity = handGrabbable != null;
             Body.position = homePosition;
             Body.rotation = homeRotation;
             transform.SetPositionAndRotation(homePosition, homeRotation);
@@ -124,7 +147,8 @@ namespace EscapeBathroom
         void OnDisable()
         {
             if (Voice != null) Voice.Stop();
-            if (IsHeld) Release(owner);
+            if (handGrabbable != null) handGrabbable.onGrabbed.RemoveListener(OnHandGrabbed);
+            if (owner != null) Release(owner);
         }
     }
 }
