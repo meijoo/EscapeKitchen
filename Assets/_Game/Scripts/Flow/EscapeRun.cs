@@ -65,6 +65,7 @@ namespace EscapeKitchen.Flow
             winSound = MakeChime();
             BuildHud();
             SceneManager.sceneLoaded += OnSceneLoaded;
+            gameObject.AddComponent<RestartButton>();
         }
 
         void OnDestroy()
@@ -93,7 +94,15 @@ namespace EscapeKitchen.Flow
                 Debug.LogError($"EscapeRun: scene '{sceneName}' isn't in the build's scene list, so the exit can't load it.", this);
                 return;
             }
-            StartCoroutine(GoToRoutine(sceneName));
+            StartCoroutine(Transition(() => SceneManager.LoadSceneAsync(sceneName), false));
+        }
+
+        /// <summary>Start over: back to the first room (first scene in the build list), timer at 0:00.</summary>
+        [ContextMenu("Restart Run")]
+        public void Restart()
+        {
+            if (Loading || !Application.isPlaying) return;
+            StartCoroutine(Transition(() => SceneManager.LoadSceneAsync(0), true));
         }
 
         /// <summary>Stop the timer and show the escape time.</summary>
@@ -104,21 +113,30 @@ namespace EscapeKitchen.Flow
             if (hud == null) BuildHud();
             string time = Format(Elapsed);
             timerText.text = time;
-            winText.text = "You escaped in " + time;
+            winText.text = WinMessage(time);
             winPanel.SetActive(true);
             audioSource.PlayOneShot(winSound, .6f);
             Debug.Log("EscapeRun: escaped in " + time, this);
         }
 
-        IEnumerator GoToRoutine(string sceneName)
+        static string WinMessage(string time) =>
+            "You escaped in " + time + "\n<size=40>Turn a palm toward you and hold Restart to play again</size>";
+
+        IEnumerator Transition(System.Func<AsyncOperation> loadScene, bool restart)
         {
             Loading = true;
             yield return Fade(1f);
             // Keep the HUD (and the black) out of the room being unloaded.
             holdHud = true;
             hud.SetParent(transform, false);
-            var load = SceneManager.LoadSceneAsync(sceneName);
+            var load = loadScene();
             while (load != null && !load.isDone) yield return null;
+            if (restart)
+            {
+                Elapsed = 0f;
+                Escaped = false;
+                winPanel.SetActive(false);
+            }
             holdHud = false;
             head = null;
             AttachHud();
@@ -198,11 +216,11 @@ namespace EscapeKitchen.Flow
             ((RectTransform)timerText.transform).pivot = new Vector2(0f, .5f);
             timerText.text = Format(Elapsed);
 
-            var panel = MakeImage(hud, "Escaped", new Vector2(0f, 60f), new Vector2(1500f, 240f), new Color(0f, 0f, 0f, .6f));
+            var panel = MakeImage(hud, "Escaped", new Vector2(0f, 60f), new Vector2(1500f, 300f), new Color(0f, 0f, 0f, .6f));
             winPanel = panel.gameObject;
-            winText = MakeText(panel.transform, "Text", Vector2.zero, new Vector2(1500f, 240f), 96, TextAnchor.MiddleCenter, font);
+            winText = MakeText(panel.transform, "Text", Vector2.zero, new Vector2(1500f, 300f), 96, TextAnchor.MiddleCenter, font);
             winPanel.SetActive(Escaped);
-            if (Escaped) winText.text = "You escaped in " + Format(Elapsed);
+            if (Escaped) winText.text = WinMessage(Format(Elapsed));
         }
 
         Image MakeImage(Transform parent, string name, Vector2 position, Vector2 size, Color color)
