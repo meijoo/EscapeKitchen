@@ -758,26 +758,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 294444396}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &295115650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1172071624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95fbf27d6637d45b386e97ddd2b6ee33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EscapeBathroom.DuckFinderInteractor
-  controllerAnchor: {fileID: 1172071623}
-  handAnchor: {fileID: 1172071620}
-  hand: {fileID: 1172071622}
-  skeleton: {fileID: 1172071621}
-  controller: 2
-  duck: {fileID: 302268532}
-  touchReach: 0.22
-  rayReach: 3.5
 --- !u!1001 &302268529
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -852,7 +832,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9130277699275644972, guid: 3b01ad47e35e7db48b79d17adaf32c1f, type: 3}
       propertyPath: m_UseGravity
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9130277699275644972, guid: 3b01ad47e35e7db48b79d17adaf32c1f, type: 3}
       propertyPath: m_Interpolate
@@ -876,6 +856,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5775343476657490613, guid: 3b01ad47e35e7db48b79d17adaf32c1f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 302268532}
+    - targetCorrespondingSourceObject: {fileID: 5775343476657490613, guid: 3b01ad47e35e7db48b79d17adaf32c1f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 302268538}
   m_SourcePrefab: {fileID: 100100000, guid: 3b01ad47e35e7db48b79d17adaf32c1f, type: 3}
 --- !u!4 &302268530 stripped
 Transform:
@@ -899,8 +882,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec1ecdfc185b6466ab1d04d35534bf2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EscapeBathroom.HiddenQuackingDuck
-  quackClip: {fileID: 8300000, guid: 971fc224f288e4ed2806dca39e09b868, type: 3}
+  quackClip: {fileID: 8300000, guid: c1497ffba93fe4e64ac18aecada249e9, type: 3}
   foundClip: {fileID: 8300000, guid: 1e6c90d4ec67f4309827149815e7e521, type: 3}
+  handGrabbable: {fileID: 302268538}
   minimumQuackInterval: 2.2
   maximumQuackInterval: 3.1
   onFound:
@@ -929,7 +913,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: c1497ffba93fe4e64ac18aecada249e9, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.8
   m_Pitch: 1
@@ -1015,6 +999,30 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &302268538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302268531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86d1dc20ffdfd4cc7a34d29f77ef1048, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EscapeKitchen.Interaction.Grabbable
+  grabbable: 1
+  pushableByHands: 0
+  throwMultiplier: 1
+  maxThrowSpeed: 5
+  holdInPlaceUntilGrabbed: 1
+  returnHomeBelowY: -2
+  onGrabbed:
+    m_PersistentCalls:
+      m_Calls: []
+  onReleased:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &382667309 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6129821106933744952, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
@@ -1088,8 +1096,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 465127925}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.9809, y: 1.06008, z: -9.00748}
+  m_LocalRotation: {x: 0, y: -0.49029526, z: -0, w: 0.8715564}
+  m_LocalPosition: {x: 10.283171, y: 0.02, z: -8.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1858,31 +1866,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.6191001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.06008
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.39251995
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9238795
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.38268346
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1909,112 +1917,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6129821106933744952, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 382667312}
-    - targetCorrespondingSourceObject: {fileID: 2912014160191170564, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1172071630}
-    - targetCorrespondingSourceObject: {fileID: 7092997754565869791, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 295115650}
   m_SourcePrefab: {fileID: 100100000, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
 --- !u!4 &1172071619 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5327112951572493352, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
   m_PrefabInstance: {fileID: 1172071618}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1172071620 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2202428403139588942, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
-  m_PrefabInstance: {fileID: 1172071618}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1172071621 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8002439494156001366, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
-  m_PrefabInstance: {fileID: 1172071618}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2609c54f376cffc4da1ab9401cc1a36f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1172071622 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8350012237766816222, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
-  m_PrefabInstance: {fileID: 1172071618}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb7623a8f0b49cf4dbaa40aea4d4be64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1172071623 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4307599795047479493, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
-  m_PrefabInstance: {fileID: 1172071618}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1172071624 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7092997754565869791, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
-  m_PrefabInstance: {fileID: 1172071618}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1172071625 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7302319702124297720, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
-  m_PrefabInstance: {fileID: 1172071618}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1172071626 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1009705726049670782, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
-  m_PrefabInstance: {fileID: 1172071618}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2609c54f376cffc4da1ab9401cc1a36f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1172071627 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 412518870644163065, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
-  m_PrefabInstance: {fileID: 1172071618}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb7623a8f0b49cf4dbaa40aea4d4be64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1172071628 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7095629427168089940, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
-  m_PrefabInstance: {fileID: 1172071618}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1172071629 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2912014160191170564, guid: 2b55076b2d81c48ee9408a79ab93569e, type: 3}
-  m_PrefabInstance: {fileID: 1172071618}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1172071630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1172071629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95fbf27d6637d45b386e97ddd2b6ee33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EscapeBathroom.DuckFinderInteractor
-  controllerAnchor: {fileID: 1172071628}
-  handAnchor: {fileID: 1172071625}
-  hand: {fileID: 1172071627}
-  skeleton: {fileID: 1172071626}
-  controller: 1
-  duck: {fileID: 302268532}
-  touchReach: 0.22
-  rayReach: 3.5
 --- !u!1001 &1295949638
 PrefabInstance:
   m_ObjectHideFlags: 0
